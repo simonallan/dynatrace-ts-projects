@@ -2,6 +2,7 @@ import * as cdk from '@aws-cdk/core';
 import * as autoscaling from '@aws-cdk/aws-autoscaling';
 import * as ec2 from '@aws-cdk/aws-ec2';
 import * as iam from '@aws-cdk/aws-iam';
+import {readFileSync} from 'fs';
 
 
 export class DynatraceActivegateStack extends cdk.Stack {
@@ -23,6 +24,8 @@ export class DynatraceActivegateStack extends cdk.Stack {
       'eu-west-2': 'ami-00c442ed0876cbc2b',
       'eu-west-3': 'ami-07bed4309217a9aab',
     })  // AMI: CIS hardened Ubuntu Linux 20.04 LTS
+
+    const user_data = readFileSync('./lib/user-data.sh', 'utf8');
 
     const activegate_sg = new ec2.SecurityGroup(this, 'activegate_sg', {
       securityGroupName: 'activegate_sg',
@@ -56,7 +59,7 @@ export class DynatraceActivegateStack extends cdk.Stack {
       vpcSubnets: { subnetType: ec2.SubnetType.PUBLIC },
       role: activegate_role,
       securityGroup: activegate_sg,
-      userData: ec2.UserData.custom("./lib/user-data.sh"),
+      userData: ec2.UserData.custom(user_data),
       machineImage: linux_ami,
       instanceType: ec2.InstanceType.of(
         ec2.InstanceClass.BURSTABLE2,
