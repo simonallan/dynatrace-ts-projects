@@ -1,6 +1,6 @@
 import * as cdk from '@aws-cdk/core';
 
-export class DynatraceTransitvpcStack extends cdk.Stack {
+export class TransitvpcStack extends cdk.Stack {
   constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
