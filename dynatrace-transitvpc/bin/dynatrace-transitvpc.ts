@@ -15,7 +15,7 @@ const vpcProps = {
   targetVpcId: "vpc-17f02973"
 }
 
-const ireland = new targetVpcStack(app, 'targetVpcStack', vpcProps.targetVpcId, {
+const ireland = new targetVpcStack(app, 'targetVpcStack', vpcProps, {
   env: {
     region: 'eu-west-1', account: '614844069056',
   },
