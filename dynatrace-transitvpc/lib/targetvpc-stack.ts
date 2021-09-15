@@ -1,17 +1,15 @@
-import * as cdk from '@aws-cdk/core';
+import * as cdk from '@aws-cdk/core'
 import * as ec2 from '@aws-cdk/aws-ec2'
-import { setFlagsFromString } from 'v8';
 
-export class TargetvpcStack extends cdk.Stack {
-  constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
+export class targetVpcStack extends cdk.Stack {
+  constructor(scope: cdk.Construct, id: string, targetVpcId: string , props?: cdk.StackProps,) {
     super(scope, id, props);
 
-    // The what???? (identify the VPC for the reader)
-    const targetvpc_id = "vpc-17f02973"
+    const vpcId = targetVpcId
 
     // Dynamically returns target VPC info
-    this.vpc_id = ec2.Vpc.fromLookup(this, 'targetvpc', {
-        vpcId: targetvpc_id
+    const vpc_id = ec2.Vpc.fromLookup(this, 'targetVpc', {
+        vpcId: vpcId
     })
   }
 }
