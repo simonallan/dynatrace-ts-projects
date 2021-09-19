@@ -3,7 +3,8 @@ import * as ec2 from '@aws-cdk/aws-ec2'
 
 export class targetVpcStack extends cdk.Stack {
 
-  public target_vpc = null;
+  // Instantiate a public variable to share VPC data between stacks
+  //public target_vpc = null;
 
   constructor(scope: cdk.Construct, id: string, vpcProps: any, props?: cdk.StackProps,) {
     super(scope, id, props);
@@ -15,5 +16,8 @@ export class targetVpcStack extends cdk.Stack {
       vpcId: vpcId,
       isDefault: false
     })
+
+    //this.target_vpc = targetVpc;
+
   }
 }
