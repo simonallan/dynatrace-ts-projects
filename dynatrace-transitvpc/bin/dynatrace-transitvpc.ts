@@ -12,7 +12,9 @@ import { targetVpcStack } from '../lib/targetvpc-stack';
 const app = new cdk.App();
 
 const vpcProps = {
-  targetVpcId: "vpc-17f02973"
+  targetVpcId: 'vpc-17f02973',
+  serviceName: 'dynatrace',
+  transitVpcCidr: "172.30.192.0/24",
 }
 
 const ireland = new targetVpcStack(app, 'targetVpcStack', vpcProps, {
@@ -21,8 +23,9 @@ const ireland = new targetVpcStack(app, 'targetVpcStack', vpcProps, {
   },
 });
 
-const london = new transitVpcStack(app, 'transitVpcStack', {
+const london = new transitVpcStack(app, 'transitVpcStack', vpcProps, {
   env: {
     region: 'eu-west-2', account: '614844069056'
-  }
+  },
 });
+

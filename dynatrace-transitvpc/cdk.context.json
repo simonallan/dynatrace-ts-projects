@@ -78,5 +78,85 @@
         ]
       }
     ]
+  },
+  "vpc-provider:account=614844069056:filter.isDefault=false:filter.vpc-id=vpc-17f02973:region=eu-west-1:returnAsymmetricSubnets=true": {
+    "vpcId": "vpc-17f02973",
+    "vpcCidrBlock": "10.1.6.0/24",
+    "availabilityZones": [],
+    "vpnGatewayId": "vgw-0c87b56a903f50930",
+    "subnetGroups": [
+      {
+        "name": "Public",
+        "type": "Public",
+        "subnets": [
+          {
+            "subnetId": "subnet-1818dd40",
+            "cidr": "10.1.6.0/27",
+            "availabilityZone": "eu-west-1a",
+            "routeTableId": "rtb-b40390d0"
+          },
+          {
+            "subnetId": "subnet-6718dd3f",
+            "cidr": "10.1.6.32/28",
+            "availabilityZone": "eu-west-1a",
+            "routeTableId": "rtb-b50390d1"
+          },
+          {
+            "subnetId": "subnet-4be51311",
+            "cidr": "10.1.6.192/27",
+            "availabilityZone": "eu-west-1a",
+            "routeTableId": "rtb-b40390d0"
+          },
+          {
+            "subnetId": "subnet-0f78e31ee5ff510c3",
+            "cidr": "10.1.6.240/28",
+            "availabilityZone": "eu-west-1b",
+            "routeTableId": "rtb-b40390d0"
+          },
+          {
+            "subnetId": "subnet-05ab54b3e1fc49015",
+            "cidr": "10.1.6.160/28",
+            "availabilityZone": "eu-west-1b",
+            "routeTableId": "rtb-b40390d0"
+          },
+          {
+            "subnetId": "subnet-b58b0fd1",
+            "cidr": "10.1.6.64/27",
+            "availabilityZone": "eu-west-1b",
+            "routeTableId": "rtb-b40390d0"
+          },
+          {
+            "subnetId": "subnet-b78b0fd3",
+            "cidr": "10.1.6.96/28",
+            "availabilityZone": "eu-west-1b",
+            "routeTableId": "rtb-b50390d1"
+          },
+          {
+            "subnetId": "subnet-84de74f2",
+            "cidr": "10.1.6.128/27",
+            "availabilityZone": "eu-west-1c",
+            "routeTableId": "rtb-b40390d0"
+          }
+        ]
+      },
+      {
+        "name": "Private",
+        "type": "Private",
+        "subnets": [
+          {
+            "subnetId": "subnet-1918dd41",
+            "cidr": "10.1.6.48/28",
+            "availabilityZone": "eu-west-1a",
+            "routeTableId": "rtb-ab0390cf"
+          },
+          {
+            "subnetId": "subnet-b68b0fd2",
+            "cidr": "10.1.6.112/28",
+            "availabilityZone": "eu-west-1b",
+            "routeTableId": "rtb-ab0390cf"
+          }
+        ]
+      }
+    ]
   }
 }
