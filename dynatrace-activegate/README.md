@@ -10,7 +10,21 @@ Dynatrace is CRUK's central monitoring platform. The system employs a central cl
 
 The purpose of this project is to automate the provision of ActiveGates as part of lifecycle management. Placing these in an autoscaling group gives us the advantage of automatic machine replacement in the case of emergencies and a platform for performing safe, controlled updates to the instances themselves.
 
-Launching this stack into an environment will create an autoscaling group configured with an EC2 instance launch configuration. This is configured to download and install the Dynatrace Activegate server on provisioning a new instance. This in turn sets-up the instance for monitoring on a CRUK-managed, CIS hardened Ubuntu server. The instance is registered with the Dynatrace cluster and is configured as a new target for local Dynatrace agents. The new Activegate is also added to SSM to provide secure SSH access to the box if needed.
+Launching this stack into an environment will create an autoscaling group configured with an EC2 instance launch configuration. This is configured to download and install the Dynatrace Activegate server on provisioning a new instance. This in turn sets-up the instance for monitoring on a CRUK-managed, CIS hardened Ubuntu server. The instance is registered with the Dynatrace cluster and is configured as a new target for local Dynatrace agents.
+
+## IAM Roles
+
+The new Activegate is also added to SSM to provide secure SSH access to the box if needed by adding the AWS managed policy `AmazonSSMManagedInstanceCore`.
+
+The role `dynatrace_aws_monitoring_role` has been added to facilitate AWS API integration with Landing Zone accounts. This role uses the inline policy `activegate_aws_monitoring` to allow metrics to be gathered from the account.
+
+### Adding new accounts to monitor through AWS API integration
+
+To gather AWS metrics from Landing Zone accounts we need to deploy a role, policy and trust relationship into the LZ account. A template for each of these has been added to the `src/` directory.
+
+The target account will need a new role called `dynatrace-integration-role` with the attached policy document `dynatrace-integration-policy.json` added to it. In turn, the Dynatrace Activegate's role policy `dynatrace_aws_monitoring_role` will need to be updated with the role ARN we just created in the target LZ account. (This takes the form `arn:aws:iam::<account number>:role/dynatrace-integration-role`).
+
+(notes on configuring Dynatrace Managed to be added here pls)
 
 ## Deploying the ActiveGate stack
 
