@@ -45,19 +45,42 @@ export class DynatraceActivegateStack extends cdk.Stack {
       'Allow OneAgent traffic from dynatrace-transit-vpc'
     )
 
-    const activegate_role = new iam.Role(this, 'activegate_role', {
+    const activegate_ssm_role = new iam.Role(this, 'activegate_role', {
       description: 'Dynatrace ActiveGate EC2 role',
       assumedBy: new iam.ServicePrincipal('ec2.amazonaws.com'),
     })
 
-    activegate_role.addManagedPolicy(
+    activegate_ssm_role.addManagedPolicy(
       iam.ManagedPolicy.fromAwsManagedPolicyName('AmazonSSMManagedInstanceCore')
     )
+
+    const activegate_aws_monitoring = new iam.PolicyDocument({
+      statements: [
+        new iam.PolicyStatement({
+          resources: [
+            'arn:aws:iam::524843571212:role/dynatrace-integration-role',
+            // Add additional accounts to monitor by adding the ARNs to the list of resources Eg:
+            //'arn:aws:iam::<account number>:role/dynatrace-integration-role'
+          ],
+          actions: ['sts:AssumeRole'],
+          effect: iam.Effect.ALLOW
+        })
+      ]
+    })
+
+    const dynatrace_aws_monitoring_role = new iam.Role(this, 'dynatrace-aws-monitoring-role',{
+      description: 'Dynatrace AWS account monitoring role',
+      assumedBy: new iam.ServicePrincipal('ec2.amazonaws.com'),
+      inlinePolicies: {
+        aws_monitoring: activegate_aws_monitoring,
+      },
+      externalIds: ['99ab4f1d-d84b-4587-892a-d8043e7768ac']
+    })
 
     new autoscaling.AutoScalingGroup(this, 'activegate-asg', {
       vpc: vpc_id,
       vpcSubnets: { subnetType: ec2.SubnetType.PUBLIC },
-      role: activegate_role,
+      role: activegate_ssm_role,
       securityGroup: activegate_sg,
       userData: ec2.UserData.custom(user_data),
       machineImage: linux_ami,
