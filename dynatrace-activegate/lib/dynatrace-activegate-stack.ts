@@ -52,7 +52,7 @@ export class DynatraceActivegateStack extends cdk.Stack {
     )
 
     // IAM policy to allow ActiveGate to assume the 'dynatrace-integration-role' into other LZ accounts
-    const dynatrace_aws_integration_policy = new iam.PolicyDocument({
+    const aws_monitoring = new iam.PolicyDocument({
       statements: [
         new iam.PolicyStatement({
           resources: [
@@ -71,7 +71,7 @@ export class DynatraceActivegateStack extends cdk.Stack {
       description: 'Dynatrace ActiveGate role',
       assumedBy: new iam.ServicePrincipal('ec2.amazonaws.com'),
       inlinePolicies: {
-        aws_monitoring: dynatrace_aws_integration_policy,
+        dynatrace_aws_integration_policy: aws_monitoring,
       },
       externalIds: ['99ab4f1d-d84b-4587-892a-d8043e7768ac'],
       managedPolicies: [
