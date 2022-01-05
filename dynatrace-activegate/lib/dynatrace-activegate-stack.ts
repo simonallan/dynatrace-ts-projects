@@ -3,6 +3,7 @@ import * as autoscaling from '@aws-cdk/aws-autoscaling';
 import * as ec2 from '@aws-cdk/aws-ec2';
 import * as iam from '@aws-cdk/aws-iam';
 import {readFileSync} from 'fs';
+import { PolicyStatement, Role } from '@aws-cdk/aws-iam';
 
 
 export class DynatraceActivegateStack extends cdk.Stack {
@@ -20,11 +21,14 @@ export class DynatraceActivegateStack extends cdk.Stack {
       vpcId: 'vpc-0ed78d1d0d9b9015e',
     }) //shared-dev-vpc
 
+    // Needs improving! Filter for latest AMI, don't hardcode images
+    // Set AMI to CIS hardened Ubuntu Linux 20.04 LTS
     const linux_ami = new ec2.GenericLinuxImage({
       'eu-west-2': 'ami-00c442ed0876cbc2b',
       'eu-west-3': 'ami-07bed4309217a9aab',
-    })  // AMI: CIS hardened Ubuntu Linux 20.04 LTS
+    })
 
+    // Read-in userData from file
     const user_data = readFileSync('./lib/user-data.sh', 'utf8');
 
     const activegate_sg = new ec2.SecurityGroup(this, 'activegate_sg', {
@@ -33,28 +37,22 @@ export class DynatraceActivegateStack extends cdk.Stack {
       vpc: vpc_id,
     })
 
+    // Allow Activegate traffic
     activegate_sg.addIngressRule(
       ec2.Peer.ipv4('172.30.0.0/24'),
       ec2.Port.tcp(443),
       'Allow Activegate traffic from dynatrace-transit-vpc'
     )
 
+    // Allow OneAgent traffic
     activegate_sg.addIngressRule(
       ec2.Peer.ipv4('172.30.0.0/24'),
       ec2.Port.tcp(9999),
       'Allow OneAgent traffic from dynatrace-transit-vpc'
     )
 
-    const activegate_ssm_role = new iam.Role(this, 'activegate_role', {
-      description: 'Dynatrace ActiveGate EC2 role',
-      assumedBy: new iam.ServicePrincipal('ec2.amazonaws.com'),
-    })
-
-    activegate_ssm_role.addManagedPolicy(
-      iam.ManagedPolicy.fromAwsManagedPolicyName('AmazonSSMManagedInstanceCore')
-    )
-
-    const activegate_aws_monitoring = new iam.PolicyDocument({
+    // IAM policy to allow ActiveGate to assume the 'dynatrace-integration-role' into other LZ accounts
+    const dynatrace_aws_integration_policy = new iam.PolicyDocument({
       statements: [
         new iam.PolicyStatement({
           resources: [
@@ -68,19 +66,24 @@ export class DynatraceActivegateStack extends cdk.Stack {
       ]
     })
 
-    const dynatrace_aws_monitoring_role = new iam.Role(this, 'dynatrace-aws-monitoring-role',{
-      description: 'Dynatrace AWS account monitoring role',
+    // Create ActiveGate IAM role and add policies
+    const dynatrace_activegate_role = new iam.Role(this, 'dynatrace-activegate-role',{
+      description: 'Dynatrace ActiveGate role',
       assumedBy: new iam.ServicePrincipal('ec2.amazonaws.com'),
       inlinePolicies: {
-        aws_monitoring: activegate_aws_monitoring,
+        aws_monitoring: dynatrace_aws_integration_policy,
       },
-      externalIds: ['99ab4f1d-d84b-4587-892a-d8043e7768ac']
+      externalIds: ['99ab4f1d-d84b-4587-892a-d8043e7768ac'],
+      managedPolicies: [
+        iam.ManagedPolicy.fromAwsManagedPolicyName('AmazonSSMManagedInstanceCore')
+      ]
     })
 
+    // Create ASG to provision ActiveGate instances
     new autoscaling.AutoScalingGroup(this, 'activegate-asg', {
       vpc: vpc_id,
       vpcSubnets: { subnetType: ec2.SubnetType.PUBLIC },
-      role: activegate_ssm_role,
+      role: dynatrace_activegate_role,
       securityGroup: activegate_sg,
       userData: ec2.UserData.custom(user_data),
       machineImage: linux_ami,
@@ -89,7 +92,7 @@ export class DynatraceActivegateStack extends cdk.Stack {
         ec2.InstanceSize.MEDIUM,
       ),
       minCapacity: 1,
-      maxCapacity: 2,
+      maxCapacity: 1,
       blockDevices: [
         {
           deviceName: '/dev/sda1',

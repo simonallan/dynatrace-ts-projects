@@ -52,8 +52,7 @@ Parameter                         | Description
 :----                             | :----
 `SVCENDPOINT`                     | A Privatelink service endpoint DNS address
 
-
-### Launch the stack in the Shared Servcies account
+### Launch the stack in the Shared Services account
 
 Currently the `dynatrace-activegate` stack is deployed from a laptop; a deployment pipeline is planned in the very near future. The TransitVPC script creates two stacks; one in each region that the VPC peering has to bridge. Deploy these with
 
