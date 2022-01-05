@@ -29,7 +29,7 @@ export class DynatraceActivegateStack extends cdk.Stack {
     })
 
     // Read-in userData from file
-    const user_data = readFileSync('./lib/user-data.sh', 'utf8');
+    const user_data = readFileSync('./src/user-data.sh', 'utf8');
 
     const activegate_sg = new ec2.SecurityGroup(this, 'activegate_sg', {
       securityGroupName: 'activegate_sg',
