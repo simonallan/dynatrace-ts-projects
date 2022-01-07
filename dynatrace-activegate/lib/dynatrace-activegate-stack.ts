@@ -2,11 +2,10 @@ import * as cdk from '@aws-cdk/core';
 import * as autoscaling from '@aws-cdk/aws-autoscaling';
 import * as ec2 from '@aws-cdk/aws-ec2';
 import * as iam from '@aws-cdk/aws-iam';
-import {readFileSync} from 'fs';
-import { PolicyStatement, Role } from '@aws-cdk/aws-iam';
+import { readFileSync } from 'fs';
+import { IVpc, Vpc } from '@aws-cdk/aws-ec2';
 
-
-export class DynatraceActivegateStack extends cdk.Stack {
+export class dynatraceActivegateStack extends cdk.Stack {
   constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
@@ -67,7 +66,7 @@ export class DynatraceActivegateStack extends cdk.Stack {
     })
 
     // Create ActiveGate IAM role and add policies
-    const dynatrace_activegate_role = new iam.Role(this, 'dynatrace-activegate-role',{
+    const dynatrace_activegate_role = new iam.Role(this, 'dynatrace-activegate-role', {
       description: 'Dynatrace ActiveGate role',
       assumedBy: new iam.ServicePrincipal('ec2.amazonaws.com'),
       inlinePolicies: {
