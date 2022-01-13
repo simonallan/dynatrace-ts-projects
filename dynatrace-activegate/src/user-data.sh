@@ -26,5 +26,4 @@ wget https://ca.dynatrace.com/dt-root.cert.pem ; \
     cat Dynatrace-ActiveGate-Linux-x86-1.213.142.sh ) | openssl cms -verify -CAfile dt-root.cert.pem > /dev/null
 
 # Run the installer
-# /bin/sh Dynatrace-ActiveGate-Linux-x86-1.213.142.sh PROXY=$SVCENDPOINT
-
+/bin/sh Dynatrace-ActiveGate-Linux-x86-1.213.142.sh PROXY=$SVCENDPOINT
