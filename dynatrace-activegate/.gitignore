@@ -1,4 +1,4 @@
-# CDK Artifacts
+# CDK Artefacts
 *.js
 !jest.config.js
 *.d.ts
