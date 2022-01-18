@@ -55,7 +55,7 @@ export class dynatraceActivegateStack extends cdk.Stack {
       statements: [
         new iam.PolicyStatement({
           resources: [
-            'arn:aws:iam::524843571212:role/dynatrace-integration-role',
+            'arn:aws:iam::524843571212:role/DynatraceIntegrationRole',
             // Add additional accounts to monitor by adding the ARNs to the list of resources Eg:
             //'arn:aws:iam::<account number>:role/dynatrace-integration-role'
           ],
@@ -68,6 +68,7 @@ export class dynatraceActivegateStack extends cdk.Stack {
     // Create ActiveGate IAM role and add policies
     const dynatrace_activegate_role = new iam.Role(this, 'dynatrace-activegate-role', {
       description: 'Dynatrace ActiveGate role',
+      roleName: 'DynatraceActiveGateRole',
       assumedBy: new iam.ServicePrincipal('ec2.amazonaws.com'),
       inlinePolicies: {
         dynatrace_aws_integration_policy: aws_monitoring,
