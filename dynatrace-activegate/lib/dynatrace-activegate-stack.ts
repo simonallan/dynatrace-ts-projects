@@ -3,9 +3,8 @@ import * as autoscaling from '@aws-cdk/aws-autoscaling';
 import * as ec2 from '@aws-cdk/aws-ec2';
 import * as iam from '@aws-cdk/aws-iam';
 import { readFileSync } from 'fs';
-import { IVpc, Vpc } from '@aws-cdk/aws-ec2';
 
-export class dynatraceActivegateStack extends cdk.Stack {
+export class DynatraceActivegateStack extends cdk.Stack {
   constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
