@@ -72,7 +72,7 @@ export class DynatraceActivegateStack extends cdk.Stack {
       inlinePolicies: {
         dynatrace_aws_integration_policy: aws_monitoring,
       },
-      externalIds: ['99ab4f1d-d84b-4587-892a-d8043e7768ac'],
+      externalIds: ['4fdc7aa7-171f-4d6f-aaec-79da7708fb7f'],
       managedPolicies: [
         iam.ManagedPolicy.fromAwsManagedPolicyName('AmazonSSMManagedInstanceCore')
       ]
