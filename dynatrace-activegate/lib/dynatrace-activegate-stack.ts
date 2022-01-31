@@ -37,14 +37,14 @@ export class DynatraceActivegateStack extends cdk.Stack {
 
     // Allow Activegate traffic
     activegate_sg.addIngressRule(
-      ec2.Peer.ipv4('172.30.0.0/24'),
+      ec2.Peer.ipv4('172.20.0.0/24'),
       ec2.Port.tcp(443),
       'Allow Activegate traffic from dynatrace-transit-vpc'
     )
 
     // Allow OneAgent traffic
     activegate_sg.addIngressRule(
-      ec2.Peer.ipv4('172.30.0.0/24'),
+      ec2.Peer.ipv4('172.20.0.0/24'),
       ec2.Port.tcp(9999),
       'Allow OneAgent traffic from dynatrace-transit-vpc'
     )
